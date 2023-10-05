@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLUMSY with BLOCKLY</title>
+    <script src="js/blockly_compressed.js"></script>
+    <script src="js/blocks_compressed.js"></script>
+    <script src="js/javascript_compressed.js"></script>
+    <script src="js/vixos.js"></script>
+    <script src="js/es.js"></script>
+    <script src="js/FileSaver.js"></script>
+    <!--js para guardar-->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/montserrat.css" />
+    <link rel="stylesheet" href="css/Roboto.css" />
+    <link rel="stylesheet" href="fonts.css" />
+    <!--icono--->
+    <link rel="stylesheet" href="demo-files/demo.css" />
+    <!--icono--->
+    <script src="demo-files/demo.js"></script>
+    <!--icono--->
+
+</head>
+
+<body>
+    <header>
+        <input type="checkbox" id="btn-menu">
+        <label for="btn-menu"><img src="images/menu.png" alt="">
+        </label>
+        <nav class="menu">
+            <ul>
+                <li><a onclick="load()"><span class="icon-folder-open"></span> Abrir XML</a></li>
+                <li><a onclick="save()"><span class="icon-download3"></span> Guardar</a></li>
+                <li><a onclick="Limpiar()" value="Delete"><span class="icon-bin"></span> Borrar</a></li>
+                <!--<li><a>Ejemplos</a>
+                    <ul class="submenu" style="width: -webkit-fill-available;">
+                        <li><a onclick="Blockly.loadServerXmlFile(Blockly.EXAMPLE_HTTPURL + 'move.xml');">Ejemplo 1</a></li>
+                        <li><a>Ejemplo 2</a></li>
+                    </ul>
+                </li>-->
+            </ul>
+        </nav>
+    </header>
+
+    <!--   ///////////////////////////////////////	TITULO	/////////////////////////////////////// -->
+
+    <div class="nombre_guardar" style="width: -webkit-fill-available">
+        <span style="color:#9575cd; font-size: 1.5em; font-weight: normal;">Nombre del programa:</span>
+        <input id="sketch_name" class="sketch_name" type="text" size="10">
+    </div>
+    <div class="titulo">
+        <h1 style="color:#ff6b6b;">C L U M S Y + <span style="color:#9575cd"> B L O C K L Y </span></h1>
+    </div>
+    <div class="play">
+        <a class="button" onclick="sendCommand()" style="font-size: 40px;"><span class="icon-play2"></span></a>
+    </div>
+    <!-- /////////////////////////////////////// Contienen botones de HIDE, DELETE and SEND CODE, y CODIGO RESULTANTE //////////////////////////// -->
+    <!--<div style="text-align: right;">
+    <!------------------------------Agrego botones y doy color---------------------------------------
+    <a class="button"  onclick="save()" style="background-color: coral">Guardar</a>
+    <a class="button"  onclick="load()" style="background-color: darkcyan">Abrir XML</a>
+    
+    
+    <!--   ********	ENVIAR CÓDIGO AL WEB SERVER	********************************* --
+    <button class="boton" type="button" onclick="sendCommand()" style="font-family: 'Nunito', sans-serif; background-color: green;">Send Code</button>
+	<p id="demo"></p>--
+	<input class="button" type="submit" id="boton" value="Ver Código" onclick="Mostrar_Ocultar()" style="background-color: #3d5afe"/>
+	<a class="button"  onclick="Limpiar()" value="Delete" style="background-color:#ff1744">Borrar</a>
+	
+	<button class="button" type="button" onclick="sendCommand()" style="background-color:#00C853">Enviar</button>
+	<p id="demo"></p>
+</div>-->
+    <!--   ********	WORKSPACE	********************************* -->
+    <!--<div class="contenedor">
+        <div id="pestanas">
+            <ul>
+                <li id="content_blocks"><a>Robot 1</a></li>
+                <li><a>Robot 2</a></li>
+            </ul>
+        </div>
+    </div>-->
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-75">
+                <div id="blocklyDiv">
+                </div>
+            </div>
+            <div class="col-25">
+                <ul class="collapsible" data-collapsible="accordion" style="margin-block-start: auto;">
+                    <div class="collapsible-header" onclick="Mostrar_Ocultar()">
+                        <span>{ }</span>
+                        <span>Vixos Source Code</span>
+                    </div>
+                    <div id="caja" style="display: none;" class="MostrarCodigo">
+                        <textarea id="CodigoResultante" wrap="soft"></textarea>
+                    </div>
+                </ul>
+
+                <!--<div class="collapsible-header" onclick="Mostrar_Ocultar()">
+              <span class="translatable_arduinoSourceCode">Arduino Source Code</span>
+            </div>
+            <!--------------------Caja de CodigoResultante -----------------------
+            <div id="caja" style="display: block;" class="MostrarCodigo">
+                <textarea id="CodigoResultante" wrap="soft"></textarea>
+            </div>    -->
+            </div>
+        </div>
+    </div>
+
+    <xml id="toolbox" style="display: none">
+
+        <!-- ///////////////////////////////////////	CLUMSY	 //////////////////////////////////////////////////////////// -->
+        <category name="CLUMSY" colour="#2e7d32">
+            <block type="walker"></block>
+            <block type="wheels"></block>
+            <block type="eyes"></block>
+
+            <!-- <block type="stop"></block>
+	    <block type="volumen"></block>
+	    <block type="volumen_number"></block>-->
+        </category>
+
+        <!--
+	  <category name="WHEELS" colour="#FFD600">
+    </category>
+-->
+        <sep></sep>
+
+        <!-- ///////////////////////////////////////	EFFECTS	 //////////////////////////////////////////////////////////// -->
+
+        <category name="EYES EFFECTS" colour="#26a69a">
+            <block type="load-pat"></block>
+            <block type="e-size"></block>
+            <block type="e-move"></block>
+            <block type="e-color"></block>
+            <block type="e-bright"></block>
+            <block type="e-blink"></block>
+
+        </category>
+        <sep></sep>
+
+
+
+        <!-- ///////////////////////////////////////	MOVEMENTS	 //////////////////////////////////////////////////////////// -->
+
+        <category name="MOVEMENTS" colour="#FFD600">
+            <block type="m"></block>
+            <block type="f"></block>
+            <block type="mff"></block>
+            <block type="mfs"></block>
+            <block type="mb"></block>
+            <block type="rl"></block>
+            <block type="rr"></block>
+            <block type="steps"></block>
+            <!--<block type="move_front"></block>
+		<block type="fast"></block>-->
+
+        </category>
+
+        <!-- ///////////////////////////////////////	TIME	 //////////////////////////////////////////////////////////// -->
+
+        <category name="TIME" colour="#4FC3F7">
+            <block type="delay"></block>
+            <block type="miliseconds"></block>
+        </category>
+
+        <!-- ///////////////////////////////////////	SOUNDS	 //////////////////////////////////////////////////////////// -->
+
+        <category name="SOUNDS" colour="#B39DDB">
+            <block type="s1"></block>
+        </category>
+
+
+        <!-- ///////////////////////////////////////	LIGHTS	 //////////////////////////////////////////////////////////// -->
+
+        <category name="LIGHTS" colour="#ffa726">
+            <block type="police"></block>
+        </category>
+        <!-- ///////////////////////////////////////	COLOURS	 //////////////////////////////////////////////////////////// -->
+
+        <category name="COLOURS" colour="#A1887F">
+            <block type="screen"></block>
+            <block type="colour_picker">
+                <field name="COLOUR">#30FFAA</field>
+            </block>
+        </category>
+        <sep></sep>
+        
+        <category name="Ejemplo" expanded="false"><!------------------------------------------------------------>
+            <category name="COLOURS" colour="#A1887F">
+                <block type="screen"></block>
+                <block type="colour_picker">
+                    <field name="COLOUR">#30FFAA</field>
+                </block>
+            </category>
+            <category name="LIGHTS" colour="#ffa726">
+                <block type="police"></block>
+            </category>
+        </category>
+
+    </xml>
+
+
+    <!--   ********	TOOLBOX	********************************* -->
+
+    <script>
+        var workspace = Blockly.inject('blocklyDiv', {
+            toolbox: document.getElementById('toolbox'),
+            grid: {
+                spacing: 20,
+                /*workpace*/
+                length: 5,
+                colour: '#cccbcb',
+                snap: true
+            },
+            trashcan: true,
+            zoom: /*Zoom*/ {
+                controls: true,
+                wheel: true,
+                startScale: 1.0,
+                maxScale: 3,
+                minScale: 0.3,
+                scaleSpeed: 1.2
+            },
+            trashcan: true
+        });
+        /*----------- quite botón de mostrar codigo --------------*/
+        /*function MostrarCodigo(){
+            var codigo = Blockly.JavaScript.workspaceToCode(workspace);
+            document.getElementById('CodigoResultante').innerHTML= codigo;
+        }*/
+
+        /*-------------------muestra codigo sin necesidad de un botón-----------------------------*/
+        workspace.addChangeListener(MostrarCodigo); /*Funcion del boton donde manda escribir*/
+        function MostrarCodigo() {
+            /* Funcion donde mando escribir es en CODIGORESULTANTE*/
+            var codigo = Blockly.JavaScript.workspaceToCode(workspace);
+            document.getElementById('CodigoResultante').innerHTML = codigo;
+        }
+        
+        /*-------------------------------- Funcion enviar comandos al web server ------------------------------*/
+        function sendCommand() {
+            var x = document.getElementById("CodigoResultante"); // X obtiene el contenido del area de texto
+            var lines = x.value.split("\n"); // cada linea esta separada por el ASCII 0x0A, asi que split la divide en lineas separadas
+            // Ahora genero cada linea con su retorno de linea...
+            var resultString = ""; // las lineas estaran contenidas en la variable resultString
+            for (var i = 0; i < lines.length; i++) {
+                resultString += lines[i] + '\r\n'; // ahora a cada linea le agrego CR LN 0x0D + 0x0A
+            }
+
+            var xhttp = new XMLHttpRequest();
+            /*xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+			document.getElementById("demo").innerHTML =
+			this.responseText;
+		}
+		};*/
+            xhttp.open("POST", "ViXos", true);
+            xhttp.send(resultString); // El cuerpo del metodo POST seran las lineas de comandos separadas...
+
+
+
+        }
+
+    </script>
+    <!-----------------------Donde hace la funcion de mostrar y ocultar---------------------------------->
+    <script type="text/javascript">
+        function Mostrar() {
+            document.getElementById("caja").style.display = "block";
+        }
+
+        function Ocultar() {
+            document.getElementById("caja").style.display = "none";
+        }
+
+        function Mostrar_Ocultar() {
+            var caja = document.getElementById("caja");
+            if (caja.style.display == "none") {
+                Mostrar();
+                /*document.getElementById("boton").value = "Ocultar";*/
+            } else {
+                Ocultar();
+                /*document.getElementById("boton").value = "Ver Código";*/
+            }
+        }
+
+    </script>
+</body>
+
+</html>
